@@ -1,22 +1,20 @@
-from flask import Flask, render_template    
+from flask import Flask, render_template, request    
 import requests 
 # redirect, url_for, json
 app = Flask(__name__)
 
 my_API_key = "d29ca490f40cf3c78c2e2895f0f3b62c"
 
-city = input("Enter city name:")
-
-def get_weather(city):
-    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={my_API_key}')
-    return response.json()
-
-@app.route("/")
+@app.route("/", methods=['POST', 'GET'])
 def home():
-    return render_template('index.html', content = info())
+    if request.method == 'POST':
+        return render_template('index.html', content = info(request.form.get('cityName')))
+    else:
+        return render_template('index.html', content = '')
 
-def info():
-    details = get_weather(city)
+def info(city):
+    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={my_API_key}')
+    details = response.json()
     table = f"""
     <table border="1">
         <tr>

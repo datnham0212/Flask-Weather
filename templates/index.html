@@ -22,6 +22,11 @@
     </style>
 </head>
 <body>
-    <div>{{ content|safe }}</div>
+    <form action="" method="post">
+        <input type="text" id="city" name="cityName" placeholder="City input">
+        <button type="submit" onclick="">View Info</button> 
+    </form>
+        <div>{{ content|safe }}</div>
+    
 </body>
 </html>
