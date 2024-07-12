@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Details</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
     <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        #loading {
+            display: none;
+        }
         table {
             width: 50%;
             border-collapse: collapse;
@@ -19,14 +28,61 @@
         table th {
             background-color: #f2f2f2;
         }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <form action="" method="post">
-        <input type="text" id="city" name="cityName" placeholder="City input">
+    <form action="" method="post" id = "weather-form">
+        <!-- <input type="text" id="city" name="cityName" placeholder="City input"> -->
+         <input type="hidden" id = "latitude" name = "latitude">
+         <input type="hidden" id = "longitude" name = "longitude"> 
         <button type="submit" onclick="">View Info</button> 
     </form>
+        <div id = "map"></div>
+        <div id = "loading">
+            <img src = "loading-spinner.gif" alt="Loading...">
+        </div>
         <div>{{ content|safe }}</div>
     
 </body>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    
+        var marker;
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lon = e.latlng.lng;
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([lat, lon]).addTo(map);
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lon;
+        });
+    
+        const form = document.getElementById('weather-form');
+        form.addEventListener('submit', () => {
+            document.getElementById('loading').style.display = 'block';
+        });
+    </script>
 </html>
