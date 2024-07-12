@@ -3,17 +3,27 @@ import requests
 # redirect, url_for, json
 app = Flask(__name__)
 
-my_API_key = ""
+my_API_key = "d29ca490f40cf3c78c2e2895f0f3b62c"
 
 @app.route("/", methods=['POST', 'GET'])
 def home():
     if request.method == 'POST':
-        return render_template('index.html', content = info(request.form.get('cityName')))
+        # return render_template('index.html', content = info(request.form.get('cityName')))
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+
+        if latitude and longitude:
+            content = info(latitude, longitude);
+
+        else:
+            content = '<p>Please select a location on the map...</p>';
+
+        return render_template('index.html', content = content);
     else:
         return render_template('index.html', content = '')
 
-def info(city):
-    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={my_API_key}')
+def info(latitude, longitude):
+    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={my_API_key}')
     details = response.json()
     table = f"""
     <table border="1">
