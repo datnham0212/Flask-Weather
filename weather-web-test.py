@@ -3,7 +3,7 @@ import requests
 # redirect, url_for, json
 app = Flask(__name__)
 
-my_API_key = "d29ca490f40cf3c78c2e2895f0f3b62c"
+my_API_key = ""
 
 @app.route("/", methods=['POST', 'GET'])
 def home():
