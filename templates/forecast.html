@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Card</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 6 equal columns */
+            gap: 16px;
+            max-width: 1200px; /* Adjust max width as needed */
+            width: 100%; /* Ensures it takes full width */
+        }
+        .card {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin: 0 0 8px;
+        }
+        .card p {
+            margin: 4px 0;
+        }
+        .weather-icon {
+            width: 50px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid">
+{% for weather in weather_data %}
+    <div class="card">
+        <h3>Weather at {{ weather.dt_txt }}</h3>
+        <p><strong>Temperature:</strong> {{ weather.main.temp | round(2) }} K</p>
+        <p><strong>Feels Like:</strong> {{ weather.main.feels_like | round(2) }} K</p>
+        <p><strong>Humidity:</strong> {{ weather.main.humidity }}%</p>
+        <p><strong>Pressure:</strong> {{ weather.main.pressure }} hPa</p>
+        <p><strong>Cloud Coverage:</strong> {{ weather.clouds.all }}%</p>
+        <p><strong>Description:</strong> {{ weather.weather[0].description }}</p>
+        <img class="weather-icon" src="http://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@2x.png" alt="{{ weather.weather[0].description }}">
+        <p><strong>Wind Speed:</strong> {{ weather.wind.speed }} m/s</p>
+        <p><strong>Wind Direction:</strong> {{ weather.wind.deg }}°</p>
+        <p><strong>Visibility:</strong> {{ weather.visibility }} m</p>
+    </div>
+{% endfor %}
+</div>
+
+</body>
+</html>
